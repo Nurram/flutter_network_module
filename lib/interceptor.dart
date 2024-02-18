@@ -9,8 +9,15 @@ class CustomInterceptor extends InterceptorsWrapper {
     log('${err.response}', name: 'ERROR:');
     log('=============== END ERROR ===============');
 
-    err.message = err.response!.data['message'][0];
-    handler.next(err);
+    handler.next(
+      DioException(
+          requestOptions: err.requestOptions,
+          response: err.response,
+          type: err.type,
+          error: err.error,
+          stackTrace: err.stackTrace,
+          message: err.response!.data['message']),
+    );
   }
 
   @override
